@@ -1,0 +1,23 @@
+$def with (transport)
+$var title: Station info
+
+<table>
+<tr>
+    <th>Name</th>
+    <th>Direction</th>
+    <th>Minutes</th>
+</tr>
+$for t in transport:
+    $if t["lost"]:
+        <tr class="lost">
+    $elif t["rt"]:
+        <tr class="realtime">
+    $else:
+        <tr>
+
+    <td>$t["name"]</td>
+    <td>$t["dir"]</td>
+    <td>$t["minutes"]</td>
+    </tr>
+
+</table>

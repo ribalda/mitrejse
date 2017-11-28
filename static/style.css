@@ -1,0 +1,30 @@
+/* Based on https://www.w3schools.com/css/tryit.asp?filename=trycss_table_color */
+table {
+    border-collapse: collapse;
+    width: calc(100% - 40px);
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+    font-size: 5vw;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+.realtime {
+    font-weight: bold;
+}
+
+.lost {
+    color: red;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+body {
+    font-size: 4vw;
+}

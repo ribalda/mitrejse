@@ -1,0 +1,8 @@
+$def with (stations)
+$var title: Stations
+
+<table>
+$for s in stations:
+    <tr>
+    <a href="station?name=$s">$s</a> </br>
+    </tr>
