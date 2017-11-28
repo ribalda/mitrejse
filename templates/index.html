@@ -2,7 +2,11 @@ $def with (stations)
 $var title: Stations
 
 <table>
+    <tr>
+    <th>Station</th>
+</tr>
 $for s in stations:
     <tr>
-    <a href="station?name=$s">$s</a> </br>
+    <td><a href="station?name=$s">$s</a></td>
     </tr>
+</table>
