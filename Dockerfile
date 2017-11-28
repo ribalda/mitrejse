@@ -9,4 +9,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD [ "python", "./mitrejse.py" ]
+CMD [ "python3", "./mitrejse.py" ]
