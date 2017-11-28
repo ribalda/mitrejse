@@ -23,19 +23,19 @@ render = web.template.render('templates/', base='layout')
 stations = {
     "Home": {
         "req": "id=1402",
-        "dir": u"Ny Ellebjerg St."
+        "dir": (u"Ny Ellebjerg St.", u"Sjælør St.")
     },
     "Ryparken": {
         "req": "id=52547",
-        "dir": u"Østerbro, Ryparken"
+        "dir": (u"Østerbro, Ryparken")
     },
     "Work C": {
         "req": "id=8600701",
-        "dir": u"Ballerup St."
+        "dir": (u"Ballerup St.", u"Klampenborg St.")
     },
     "Work F": {
         "req": "id=8600742",
-        "dir": u"Hellerup St."
+        "dir": (u"Hellerup St.", u"Klampenborg St.")
     },
 }
 
@@ -50,7 +50,7 @@ class index:
 class station:
 
     def parseDeparture(self, station, dep):
-        if dep.attributes['direction'].value != station["dir"]:
+        if not dep.attributes['direction'].value in station["dir"]:
             return None
         if dep.hasAttribute("rtTime"):
             time = dep.attributes['rtTime'].value
@@ -68,7 +68,7 @@ class station:
 
         d = dict()
         d["name"] = dep.attributes['name'].value
-        d["dir"] = station["dir"]
+        d["dir"] = dep.attributes['direction'].value
         d["minutes"] = int(round(abs(difftime) / 60.0))
         d["lost"] = now > time
         d["rt"] = dep.hasAttribute("rtTime")
