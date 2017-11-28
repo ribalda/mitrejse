@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 __author__ = "Ricardo Ribalda"
 __copyright__ = "Copyright 2017, Ricardo Ribalda"
