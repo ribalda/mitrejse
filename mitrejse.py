@@ -31,11 +31,15 @@ stations = {
     },
     "Work C": {
         "req": "id=8600701",
-        "dir": (u"Ballerup St.", u"Klampenborg St.")
+        "dir": (u"Ballerup St.", u"Frederikssund St.")
     },
     "Work F": {
         "req": "id=8600742",
         "dir": (u"Hellerup St.", u"Klampenborg St.")
+    },
+    "Flintholm": {
+        "req": "id=8600736?id=8600736&useBus=0&useMetro=0",
+        "dir": (u"Klampenborg St.")
     },
 }
 
