@@ -1,7 +1,7 @@
 /* Based on https://www.w3schools.com/css/tryit.asp?filename=trycss_table_color */
 table {
     border-collapse: collapse;
-    width: calc(100% - 40px);
+    width: calc(100%);
 }
 
 th, td {
