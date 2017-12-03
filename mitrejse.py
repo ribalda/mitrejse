@@ -61,7 +61,7 @@ class station:
         else:
             time = dep.attributes['time'].value
         time = dep.attributes['date'].value + " " + time
-        time = parser.parse(time)
+        time = parser.parse(time, dayfirst=True)
         now = datetime.datetime.now()
 
         if (now > time):
