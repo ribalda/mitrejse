@@ -23,7 +23,7 @@ render = web.template.render('templates/', base='layout')
 stations = {
     "Home": {
         "req": "id=1402",
-        "dir": (u"Ny Ellebjerg St.", u"Sjælør St.")
+        "dir": (u"Ny Ellebjerg St.", u"Sjælør St.", u"Mozarts Plads")
     },
     "Ryparken": {
         "req": "id=52547",
