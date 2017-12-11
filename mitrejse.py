@@ -15,6 +15,7 @@ urls = (
     '/(station)', 'station',
 )
 render = web.template.render('templates/', base='layout')
+renderesp = web.template.render('templates')
 
 # Values obtained using:
 # https://epsg.io/map#srs=4326&x=12.504158&y=55.667069&z=16 (WGS84)
@@ -80,6 +81,7 @@ class station:
 
     def GET(self, name=None):
         station = stations[web.input().name]
+        esp = hasattr(web.input(), 'esp')
         response = requests.post(baseurl + station["req"])
         xmldoc = minidom.parseString(response.content)
         itemlist = xmldoc.getElementsByTagName('Departure')
@@ -89,8 +91,13 @@ class station:
             if d is None:
                 continue
             deps.append(d)
+            if (esp):
+                break
         # print(deps)
-        return render.station(deps)
+        if (esp):
+            return renderesp.esp(deps)
+        else:
+            return render.station(deps)
 
 
 if __name__ == "__main__":
