@@ -9,12 +9,12 @@ pip install -r requirements.txt
 python3 main.py
 ```
 
-##Run on GAE
+## Run on GAE
 ```
 gcloud app deploy
 ```
 
-##Run on Docker
+## Run on Docker
 ```
 git clone https://github.com/ribalda/mitrejse.git
 cd mitrejse
