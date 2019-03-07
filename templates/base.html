@@ -1,11 +1,10 @@
-$def with (content)
 <html>
 <head>
-    <title>$content.title</title>
+	<title>{{title}}</title>
     <link rel="stylesheet" href="static/style.css" type="text/css" media="screen" charset="utf-8"/>
     <link rel="shortcut icon" href="static/favicon.ico">
 </head>
 <body>
-$:content
+{% block content %}{% endblock %}
 </body>
 </html>

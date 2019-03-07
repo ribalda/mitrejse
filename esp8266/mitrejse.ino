@@ -31,7 +31,7 @@ SOFTWARE.
 
 const char* ssid = "***";
 const char* password = "****";
-const char* url = "http://****:1414/station?name=Work%20C&esp=1";
+const char* url = "http://****:1414/esp?name=Home";
 
 #define OLED_MOSI  13   //D1
 #define OLED_CLK   14   //D0

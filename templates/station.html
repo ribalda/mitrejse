@@ -1,23 +1,25 @@
-$def with (transport)
-$var title: Station info
-
+{% extends "base.html" %}
+{% block content %}
 <table>
 <tr>
     <th>Name</th>
     <th>Direction</th>
     <th>Minutes</th>
 </tr>
-$for t in transport:
-    $if t["lost"]:
+{% for t in transport%}
+    {% if t["lost"] %}
         <tr class="lost">
-    $elif t["rt"]:
+    {% elif t["rt"] %}
         <tr class="realtime">
-    $else:
+    {% else %}
         <tr>
+    {% endif %}
 
-    <td>$t["name"]</td>
-    <td>$t["dir"]</td>
-    <td>$t["minutes"]</td>
+    <td>{{t["name"]}}</td>
+    <td>{{t["dir"]}}</td>
+    <td>{{t["minutes"]}}</td>
     </tr>
+{% endfor %}
 
 </table>
+{% endblock %}

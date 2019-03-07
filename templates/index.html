@@ -1,12 +1,14 @@
-$def with (stations)
-$var title: Stations
+{% extends "base.html" %}
 
+{% block content %}
 <table>
     <tr>
     <th class="station">Station</th>
 </tr>
-$for s in stations:
+{% for s in stations%}
     <tr>
-    <td class="station"><a href="station?name=$s">$s</a></td>
+	    <td class="station"><a href="station?name={{s}}">{{s}}</a></td>
     </tr>
+{% endfor %}
 </table>
+{% endblock %}
