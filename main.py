@@ -25,7 +25,7 @@ urls = (
 stations = {
     "Home": {
         "req": "id=1402",
-        "dir": (u"Ny Ellebjerg St.", u"Sjælør St.", u"Mozarts Plads")
+        "dir": (u"Ny Ellebjerg St.", u"Sjælør St.", u"Mozarts Plads", u"Teglholmen")
     },
     "Ryparken": {
         "req": "id=1404",
