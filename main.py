@@ -25,7 +25,7 @@ urls = (
 stations = {
     "Home": {
         "req": "id=1402",
-        "dir": (u"Ny Ellebjerg St.", u"Sjælør St.", u"Mozarts Plads", u"Teglholmen")
+        "dir": (u"Ny Ellebjerg St.", u"Sjælør St.", u"Mozarts Plads", u"Teglholmen", u"Nørreport St.")
     },
     "Ryparken": {
         "req": "id=1404",
@@ -33,7 +33,7 @@ stations = {
     },
     "Work C": {
         "req": "id=8600701",
-        "dir": (u"Ballerup St.", u"Frederikssund St.")
+        "dir": (u"Ballerup St.", u"Frederikssund St.", u"Ølstykke St.")
     },
     "Work F": {
         "req": "id=8600742",
