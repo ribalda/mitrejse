@@ -102,11 +102,5 @@ def station():
     deps = getDepartures(station)
     return render_template('station.html', transport=deps, title="Station")
 
-@app.route('/esp')
-def esp():
-    station = stations[request.args.get('name')]
-    deps = getDepartures(station)
-    return render_template('esp.html', transport=deps[0])
-
 if __name__ == "__main__":
     app.run (host="0.0.0.0", port=8080, debug=True)
