@@ -6,6 +6,8 @@ __license__ = "GPL"
 
 import requests
 import datetime
+import logging
+import os
 from dateutil import parser
 from dateutil.tz import gettz
 from urllib.parse import quote
@@ -14,15 +16,29 @@ from google.cloud import secretmanager
 
 from flask import Flask, render_template, request
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-def get_secret(secret_name="REJSEPLANEN_API_KEY"):
+SECRET_NAME = "REJSEPLANEN_API_KEY"
 
-    _, project_id = google.auth.default()
 
-    client = secretmanager.SecretManagerServiceClient()
-    name = client.secret_version_path(project_id, secret_name, "latest")
-    response = client.access_secret_version(name=name)
-    return response.payload.data.decode("UTF-8")
+def get_secret():
+    if os.environ.get(SECRET_NAME):
+        return os.environ.get(SECRET_NAME)
+    try:
+        _, project_id = google.auth.default()
+        if not project_id:
+            logger.error("No Google Cloud project ID found.")
+            return None
+
+        client = secretmanager.SecretManagerServiceClient()
+        name = client.secret_version_path(project_id, SECRET_NAME, "latest")
+        response = client.access_secret_version(name=name)
+        return response.payload.data.decode("UTF-8")
+    except Exception as e:
+        logger.error(f"Failed to retrieve secret {SECRET_NAME}: {e}")
+        return None
 
 
 # Values obtained using:
@@ -47,36 +63,51 @@ baseurl = f"https://www.rejseplanen.dk/api/"
 
 def parseDeparture(dep):
     out = dict()
-    out["dir"] = dep["direction"]
-    out["directionFlag"] = dep["directionFlag"]
-    out["name"] = dep["name"]
+    out["dir"] = dep.get("direction", "Unknown")
+    out["directionFlag"] = dep.get("directionFlag", "InvalidDirectionFlag")
+    out["name"] = dep.get("name", "Unknown")
 
-    # Get time
-    if "rtTime" in dep:
-        time = dep["rtTime"]
-    else:
-        time = dep["time"]
-    time = parser.parse(
-        f"{dep['date']} {time} KKT",
-        dayfirst=True,
-        tzinfos={"KKT": gettz("Europe/Copenhagen")},
-    )
-    now = datetime.datetime.now(datetime.timezone.utc)
-    difftime = abs((now - time).total_seconds())
-    out["minutes"] = int(round(abs(difftime) / 60.0))
-    out["lost"] = now > time
+    time = dep.get("rtTime", dep.get("time", "InvalidTime"))
+    try:
+        time = parser.parse(
+            f"{dep['date']} {time} KKT",
+            dayfirst=True,
+            tzinfos={"KKT": gettz("Europe/Copenhagen")},
+        )
+        now = datetime.datetime.now(datetime.timezone.utc)
+        departure_time = time.astimezone(datetime.timezone.utc)
+        delta = departure_time - now
+        out["minutes"] = int(delta.total_seconds() / 60)
+        out["lost"] = delta.total_seconds() < 0
+    except (ValueError, TypeError) as e:
+        logger.error(f"Error parsing date/time: {e}")
+        out["minutes"] = 0
+        out["lost"] = True
+
     out["rt"] = "prognosisType" in dep
 
     return out
 
 
 def getDepartures(station):
-    url = f"{baseurl}departureBoard?accessId={get_secret()}&format=json&lang=en&duration=120&id={quote(station['id'])}&lines={station['line']}"
-    response = requests.post(url).json()
+    api_key = get_secret()
+    if not api_key:
+        logger.error("No API key available.")
+        return []
 
-    departures = tuple(map(parseDeparture, response["Departure"]))
+    url = f"{baseurl}departureBoard?accessId={api_key}&format=json&lang=en&duration=120&id={quote(station['id'])}&lines={station['line']}"
 
-    return [d for d in departures if d["directionFlag"] == station["directionFlag"]]
+    try:
+        response = requests.post(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+
+        departures = tuple(map(parseDeparture, data["Departure"]))
+
+        return [d for d in departures if d["directionFlag"] == station["directionFlag"]]
+    except Exception as e:
+        logger.error(f"Error fetching departures: {e}")
+        return []
 
 
 app = Flask(__name__)
@@ -90,8 +121,13 @@ def index():
 @app.route("/station")
 def station():
     station_name = request.args.get("name")
-    station = stations[station_name]
-    deps = getDepartures(station)
+    if not station_name or station_name not in stations:
+        return render_template(
+            "index.html", stations=stations.keys(), title="Station Not Found"
+        )
+
+    station_config = stations[station_name]
+    deps = getDepartures(station_config)
     return render_template("station.html", transport=deps, title=station_name)
 
 
