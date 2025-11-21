@@ -89,9 +89,10 @@ def index():
 
 @app.route("/station")
 def station():
-    station = stations[request.args.get("name")]
+    station_name = request.args.get("name")
+    station = stations[station_name]
     deps = getDepartures(station)
-    return render_template("station.html", transport=deps, title="Station")
+    return render_template("station.html", transport=deps, title=station_name)
 
 
 if __name__ == "__main__":

@@ -1,25 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
-<table>
-<tr>
-    <th>Name</th>
-    <th>Direction</th>
-    <th>Minutes</th>
-</tr>
-{% for t in transport%}
-    {% if t["lost"] %}
-        <tr class="lost">
-    {% elif t["rt"] %}
-        <tr class="realtime">
-    {% else %}
-        <tr>
-    {% endif %}
 
-    <td>{{t["name"]}}</td>
-    <td>{{t["dir"]}}</td>
-    <td>{{t["minutes"]}}</td>
-    </tr>
-{% endfor %}
+<a href="/" class="back-link">Back to Stations</a>
 
-</table>
+<div class="departures-list">
+    {% for t in transport %}
+    <div class="card animate-entry {% if t['lost'] %}row-lost{% endif %}">
+        <div class="departure-row">
+            <div class="departure-info">
+                <div class="departure-name">
+                    {{t["name"]}}
+                    {% if t["rt"] %}
+                    <span class="status-badge status-realtime">Realtime</span>
+                    {% endif %}
+                    {% if t["lost"] %}
+                    <span class="status-badge status-lost">Late</span>
+                    {% endif %}
+                </div>
+                <div class="departure-dir">To {{t["dir"]}}</div>
+            </div>
+            <div class="departure-time">
+                {{t["minutes"]}} <span class="time-unit">min</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

@@ -1,14 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-<table>
-    <tr>
-    <th class="station">Station</th>
-</tr>
-{% for s in stations%}
-    <tr>
-	    <td class="station"><a href="station?name={{s}}">{{s}}</a></td>
-    </tr>
-{% endfor %}
-</table>
+<div class="station-grid">
+    {% for s in stations %}
+    <a href="station?name={{s}}" class="station-link">
+        <div class="card animate-entry">
+            <div class="station-name">{{s}}</div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
 {% endblock %}
