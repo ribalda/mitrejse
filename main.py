@@ -71,7 +71,7 @@ def parseDeparture(dep):
     try:
         time = parser.parse(
             f"{dep['date']} {time} KKT",
-            dayfirst=True,
+            #dayfirst=True,
             tzinfos={"KKT": gettz("Europe/Copenhagen")},
         )
         now = datetime.datetime.now(datetime.timezone.utc)
